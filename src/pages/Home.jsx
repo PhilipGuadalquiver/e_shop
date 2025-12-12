@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import { useCart } from '../context/CartContext';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import './Home.css';
 
-const Home = () => {
+const Home = ({ setCurrentPage }) => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [currentIndex, setCurrentIndex] = useState(0);
+    const { addToCart } = useCart();
 
     const images = [
         'https://images.pexels.com/photos/277390/pexels-photo-277390.jpeg?w=1600', // Watch
@@ -47,7 +49,12 @@ const Home = () => {
                 <div className="hero-content">
                     <h1>Shop Smarter, Live Better</h1>
                     <p>Discover exclusive deals on the latest trends, all in one place.</p>
-                    <button className="shop-now">Shop Now</button>
+                    <button 
+                        className="shop-now"
+                        onClick={() => setCurrentPage && setCurrentPage('Shop')}
+                    >
+                        Shop Now
+                    </button>
                 </div>
                 <div className="hero-image">
                     <img src={images[currentIndex]} alt="Shopping Banner" className="fade-in" />
@@ -83,7 +90,15 @@ const Home = () => {
                                     <div className="product-details">
                                         <h3 className="product-title">{product.title}</h3>
                                         <p className="product-price">${product.price.toFixed(2)}</p>
-                                        <button className="buy-now">Buy Now</button>
+                                        <button 
+                                            className="buy-now"
+                                            onClick={() => {
+                                                addToCart(product, 1);
+                                                alert(`${product.title} added to cart!`);
+                                            }}
+                                        >
+                                            Add to Cart
+                                        </button>
                                     </div>
                                 </div>
                             </SwiperSlide>

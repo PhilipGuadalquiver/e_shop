@@ -1,21 +1,38 @@
 import React, { useState } from "react";
 import { Menu, X, ShoppingCart, User, Search } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import "./NavBar.css"; // Import external CSS file
+import { useCart } from "../context/CartContext";
+import "./NavBar.css";
 
-
-
-const NavBar = () => {
+const NavBar = ({ currentPage, setCurrentPage }) => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { getCartItemsCount } = useCart();
+
+  const handleNavClick = (page) => {
+    setCurrentPage(page);
+    setMenuOpen(false);
+  };
+
+  const navItems = ["Home", "Shop", "Deals", "Contact"];
 
   return (
     <nav className="navbar">
       <div className="navbar-container">
-        <div className="logo">E-Shop</div>
+        <div className="logo" onClick={() => handleNavClick("Home")} style={{ cursor: 'pointer' }}>
+          E-Shop
+        </div>
 
         <div className="nav-links">
-          {["Home", "Shop", "Deals", "Contact"].map((item) => (
-            <a key={item} href="#" className="nav-item">
+          {navItems.map((item) => (
+            <a
+              key={item}
+              href="#"
+              className={`nav-item ${currentPage === item ? "active" : ""}`}
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavClick(item);
+              }}
+            >
               {item}
             </a>
           ))}
@@ -27,7 +44,16 @@ const NavBar = () => {
         </div>
 
         <div className="icons">
-          <ShoppingCart className="icon" size={24} />
+          <div
+            className="cart-icon-wrapper"
+            onClick={() => handleNavClick("Cart")}
+            style={{ cursor: "pointer", position: "relative" }}
+          >
+            <ShoppingCart className="icon" size={24} />
+            {getCartItemsCount() > 0 && (
+              <span className="cart-badge">{getCartItemsCount()}</span>
+            )}
+          </div>
           <User className="icon" size={24} />
           <button className="menu-button" onClick={() => setMenuOpen(!menuOpen)}>
             {menuOpen ? <X size={28} /> : <Menu size={28} />}
@@ -44,11 +70,29 @@ const NavBar = () => {
             transition={{ duration: 0.3 }}
             className="mobile-menu"
           >
-            {["Home", "Shop", "Deals", "Contact"].map((item) => (
-              <a key={item} href="#" className="mobile-nav-item">
+            {navItems.map((item) => (
+              <a
+                key={item}
+                href="#"
+                className={`mobile-nav-item ${currentPage === item ? "active" : ""}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavClick(item);
+                }}
+              >
                 {item}
               </a>
             ))}
+            <a
+              href="#"
+              className={`mobile-nav-item ${currentPage === "Cart" ? "active" : ""}`}
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavClick("Cart");
+              }}
+            >
+              Cart ({getCartItemsCount()})
+            </a>
           </motion.div>
         )}
       </AnimatePresence>

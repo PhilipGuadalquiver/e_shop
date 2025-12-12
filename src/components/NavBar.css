@@ -70,6 +70,38 @@
   .icon:hover {
     color: #007bff;
   }
+
+  .cart-icon-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .cart-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #e60023;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: bold;
+  }
+
+  .nav-item.active {
+    color: #007bff;
+    font-weight: 600;
+  }
+
+  .mobile-nav-item.active {
+    color: #007bff;
+    font-weight: 600;
+  }
   
   .menu-button {
     display: none;
